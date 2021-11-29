@@ -1,15 +1,14 @@
 import overpy
 import app_logger
 
-
 class Overpy_map():
-    def __init__(self) -> None:
-        self.logger = app_logger.get_logger(__name__)
+  def __init__(self) -> None:
+      self.logger = app_logger.get_logger(__name__)
 
-    def get_apartments(self):
-        try:
-            api = overpy.Overpass()
-            r = api.query("""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="FR-75"]->.country;
+  def get_apartments(self):
+    try:
+      api = overpy.Overpass()
+      r = api.query("""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="FR-75"]->.country;
       
       ( 
         way(area.country)
