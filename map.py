@@ -5,17 +5,17 @@ class Overpy_map():
   def __init__(self) -> None:
       self.logger = app_logger.get_logger(__name__)
 
-  def get_apartments(self):
+  def get_apartments(self, count, country):
     try:
       api = overpy.Overpass()
-      r = api.query("""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="FR-75"]->.country;
+      r = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{country}"]->.country;
       
       ( 
         way(area.country)
       
         [building=apartments][~"addr:postcode"~"."][~"addr:street"~"."];
       );
-      out body 10;
+      out body {count};
       >;
       out meta qt ;
       """)
