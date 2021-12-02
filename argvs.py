@@ -16,7 +16,7 @@ class Overpy_map():
       
         [building=apartments][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
       );
-      out body ;
+      out body;
       >;
       out meta qt ;
       """)
@@ -24,7 +24,7 @@ class Overpy_map():
       arr = [] 
       res = r.ways
       random.shuffle(res)
-      for temp in range(0, int(count)):
+      for temp in range(0, count):
           try:
               # https://www.google.com/maps/place/12+Vla+d'Est%C3%A9,+75013+Paris/@48.8221615,2.3648274,17z/data=!3m1!4b1!4m5!3m4!1s0x47e67229a6ca577f:0xc13c63b0b6802c32!8m2!3d48.8221615!4d2.3670161
               res[temp].tags['link'] = f"""https://www.google.com/maps/place/{res[temp].tags['addr:housenumber']}+{
@@ -46,7 +46,7 @@ class Excel():
 
     def insert_data(self, aparts, filename):
         try:
-            wb = Workbook(os.path.dirname(os.path.abspath(__file__)) + '/results/'+ f'{filename}.xlsx')
+            wb = Workbook(os.path.dirname(os.path.abspath(__file__)) + '/results/' + filename + '/' +f'{filename}.xlsx')  #добавить создание нового файла
             worksheet = wb.add_worksheet()
             fields = ["№", "адрес", "индекс", "область, город", "ссылка", "страна"]
             for i in range(0, 6):    
@@ -72,14 +72,13 @@ class Excel():
                         worksheet.write(counter+1, 2, row['addr:postcode'])
                     if 'link' in row.keys():
                         worksheet.write(counter+1, 4, row['link'])  
-                    if 'addr:country' in row.keys():
-                        worksheet.write(counter+1, 5, row['addr:country'])    
+                    worksheet.write(counter+1, 5, country)    
             wb.close()
         except Exception as ex:
             self.logger.error('Error in inserting data - ' + str(ex))
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--count', action='store',
+parser.add_argument('--count', action='store', type=int,
                     dest='count', help='количество')
 parser.add_argument('--country', action='store',
                     dest='country', help='страна')
@@ -87,13 +86,17 @@ parser.add_argument('--country', action='store',
 args = parser.parse_args()
 print(args.count, args.country)
 
-known_countries = ['FR']
-if args.country not in known_countries:
+country = args.country.upper()
+count = args.count
+print(country)
+
+known_countries = ['FR', 'AU', 'AT', 'NZL']
+if country not in known_countries:
     print('Некорректная страна')
     exit()
 
 ex = Excel()
 om = Overpy_map()
 
-aparts = om.get_apartments(args.count, args.country)
-ex.insert_data(aparts, 'file1')
+aparts = om.get_apartments(count, country)
+ex.insert_data(aparts, country)
