@@ -1,6 +1,7 @@
 import argparse, app_logger, overpy, os
 from xlsxwriter.workbook import Workbook
 import random
+import time
 
 class Overpy_map():
   def __init__(self) -> None:
@@ -20,11 +21,25 @@ class Overpy_map():
       >;
       out meta qt ;
       """)
+      time.sleep(60)
+      r_house= api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-1"="{country}"]->.country;
+      
+      ( 
+        way(area.country)
+      
+        [building=house][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
+      );
+      out body;
+      >;
+      out meta qt ;
+      """)
       
       arr = [] 
       res = r.ways
+      res.extend(r_house.ways)
       random.shuffle(res)
-      for temp in range(0, count):
+      temp = 0
+      while temp < count:
           try:
               # https://www.google.com/maps/place/12+Vla+d'Est%C3%A9,+75013+Paris/@48.8221615,2.3648274,17z/data=!3m1!4b1!4m5!3m4!1s0x47e67229a6ca577f:0xc13c63b0b6802c32!8m2!3d48.8221615!4d2.3670161
               res[temp].tags['link'] = f"""https://www.google.com/maps/place/{res[temp].tags['addr:housenumber']}+{
@@ -32,6 +47,7 @@ class Overpy_map():
               res[temp].nodes[2].lat},{res[temp].nodes[2].lon},17z/"""
               res[temp].tags['link'] = res[temp].tags['link'].replace(' ', '+')
               arr.append(res[temp].tags)
+              temp +=1
               print(res[temp].tags['link'] )
           except Exception as ex:
               continue
