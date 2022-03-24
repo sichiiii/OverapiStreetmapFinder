@@ -1,7 +1,0 @@
- Команда для запуска:
- 
- python3 argvs.py {регионы}        (например: python3 argvs.py CA-AB CA-NU CA-YT)
- 
- регионы:  CA-AB, CA-BC, CA-MB, CA-NB, CA-NL, CA-NS, CA-ON, CA-PE, CA-QC, CA-SK, CA-NT, CA-NU, CA-YT;
- расшифровка регионов в файле regions.png, версия python должна быть быть выше или равна 3.5;
- 
