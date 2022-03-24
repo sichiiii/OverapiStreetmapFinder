@@ -65,7 +65,7 @@ class Excel():
 
     def insert_data(self, aparts, filename):
         try:
-            wb = Workbook(os.path.dirname(os.path.abspath(__file__)) + f'/results/CA/{filename}.xlsx')
+            wb = Workbook(os.path.dirname(os.path.abspath(__file__)) + f'/results/{filename}.xlsx')
             worksheet = wb.add_worksheet()
             fields = ["№", "адрес", "индекс", "область, город", "ссылка", "страна", 'тип здания']
             for i in range(0, 7):
@@ -101,7 +101,7 @@ if __name__ == '__main__':
     allowed_states = ['CA-AB', 'CA-BC', 'CA-MB', 'CA-NB', 'CA-NL', 'CA-NS', 'CA-ON', 'CA-PE', 'CA-QC', 'CA-SK', 'CA-NT',\
                       'CA-NU', 'CA-YT']
     allowed_building = ['apartments', 'house', 'bungalow', 'cabin', 'dormitory', 'farm', 'ger', 'hotel', 'houseboat', \
-                        'residental', 'semidetached_house', 'static_caravan', 'terrace']
+                        'residential', 'semidetached_house', 'static_caravan', 'terrace']
     print('Начало операции')
     if '-s' in sys.argv:
         states = []
@@ -111,8 +111,7 @@ if __name__ == '__main__':
             if region in allowed_states:
                 states.append(region)
             index += 1
-    else:
-        print('Отсутствует флаг регионов "-s"')
+
     if '-b' in sys.argv:
         index = sys.argv.index('-b') + 1
         while index < len(sys.argv):
@@ -120,8 +119,6 @@ if __name__ == '__main__':
             if building in allowed_building:
                 allowed_building.remove(building)
             index += 1
-    else:
-        print('Отсутствует флаг типа зданий "-b"')
 
     om = Overpy_map(states, allowed_building)
     om.get_apartments()

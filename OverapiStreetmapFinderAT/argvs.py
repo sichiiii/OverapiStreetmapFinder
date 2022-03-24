@@ -1,311 +1,66 @@
-import argparse, app_logger, overpy, os
+import app_logger, overpy, os, sys, time
+
 from xlsxwriter.workbook import Workbook
-import random
-import time
+
 
 class Overpy_map():
-    def __init__(self) -> None:
+    def __init__(self, states, buildings) -> None:
         self.logger = app_logger.get_logger(__name__)
         self.ex = Excel()
+        self.states = states
+        self.buildings = buildings
 
     def get_apartments(self):
         try:
-            state_arr = ['AT-1', 'AT-3', 'AT-4', 'AT-5', 'AT-6', 'AT-7', 'AT-8', 'AT-9']
-            for state in state_arr:
-                success_query = 0
-                try:
-                    api = overpy.Overpass()
-                    while 1:
-                        try:
-                            r = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country; 
-                            
-                            ( 
-                                way(area.country)
-                            
-                            
-                                [building=apartments][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    print(r.ways)
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_house = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            
-                            ( 
-                                way(area.country)
-                            
-                                [building=house][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_bungalow = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=bungalow][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_cabin = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=cabin][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_detached = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=cabin][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            time.sleep(30)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    print('!')
-                    while 1:
-                        try:
-                            r_dormitory = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=dormitory][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_farm = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=farm][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_ger = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=ger][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_hotel = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=hotel][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_houseboat = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=houseboat][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_residental = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=residental][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_semidetached_house = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=semidetached_house][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_static_caravan = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=static_caravan][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    while 1:
-                        try:
-                            r_terrace = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country;
-                            ( 
-                                way(area.country)
-                            
-                                [building=terrace][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
-                            );
-                            out body;
-                            >;
-                            out meta qt ;
-                            """)
-                            break
-                        except: 
-                            time.sleep(60)
-                            pass
-                    time.sleep(30)
-                    print('!')
-                    arr = [] 
-                    res = r.ways
-                    res.extend(r_bungalow.ways)
-                    res.extend(r_house.ways)
-                    res.extend(r_farm.ways)
-                    res.extend(r_ger.ways)
-                    res.extend(r_detached.ways)
-                    res.extend(r_hotel.ways)
-                    res.extend(r_dormitory.ways)
-                    res.extend(r_houseboat.ways)
-                    res.extend(r_residental.ways)
-                    res.extend(r_semidetached_house.ways)
-                    res.extend(r_static_caravan.ways)
-                    res.extend(r_terrace.ways)
-                    res.extend(r_cabin.ways)
-                    self.logger.warning(res)
+            try:
+                api = overpy.Overpass()
+                res = []
+                for state in self.states:
+                    count = 1
+                    for building in self.buildings:
+                        while 1:
+                            try:
+                                r = api.query(f"""[maxsize:1073741824][timeout:600]; area["ISO3166-2"="{state}"]->.country; 
+                                ( 
+                                    way(area.country)
+
+                                    [building={building}][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
+                                );
+                                out body;
+                                >;
+                                out meta qt;
+                                """)
+                                res.extend(r.ways)
+                                break
+                            except:
+                                time.sleep(60)
+                                pass
+                        time.sleep(60)
+                        print(f'{count}/{len(self.buildings)} for {state}')
+                        count += 1
+                    print(f'Сборка {state} завершена')
+                    print('Запись в эксель...')
+
+                    arr = []
                     temp = 0
                     for j in range(0, len(res)):
                         try:
-                            print(res[temp].tags)
-                            # https://www.google.com/maps/place/12+Vla+d'Est%C3%A9,+75013+Paris/@48.8221615,2.3648274,17z/data=!3m1!4b1!4m5!3m4!1s0x47e67229a6ca577f:0xc13c63b0b6802c32!8m2!3d48.8221615!4d2.3670161
-                            res[temp].tags['link'] = f"""https://www.google.com/maps/place/{res[temp].tags['addr:housenumber']}+{
+                            res[temp].tags[
+                                'link'] = f"""https://www.google.com/maps/place/{res[temp].tags['addr:housenumber']}+{
                             res[temp].tags['addr:street']}+{res[temp].tags['addr:postcode']}+{res[temp].tags['addr:city']}/@{
                             res[temp].nodes[2].lat},{res[temp].nodes[2].lon},17z/"""
                             res[temp].tags['link'] = res[temp].tags['link'].replace(' ', '+')
                             arr.append(res[temp].tags)
                         except:
                             res[temp].tags['link'] = 'None'
-                        temp +=1
-                    print(arr)
+                        temp += 1
+
                     self.ex.insert_data(arr, state)
-                except Exception as ex:
-                    self.logger.error('API Query error - ' + str(ex))
+            except Exception as ex:
+                self.logger.error('API Query error - ' + str(ex))
         except Exception as ex:
             self.logger.error('Loop error - ' + str(ex))
+
 
 class Excel():
     def __init__(self) -> None:
@@ -313,37 +68,61 @@ class Excel():
 
     def insert_data(self, aparts, filename):
         try:
-            wb = Workbook(os.path.dirname(os.path.abspath(__file__)) + '/results/' + 'AT' + '/' +f'{filename}.xlsx')  #добавить создание нового файла
+            wb = Workbook(os.path.dirname(os.path.abspath(__file__)) + f'/results/{filename}.xlsx')
             worksheet = wb.add_worksheet()
             fields = ["№", "адрес", "индекс", "область, город", "ссылка", "страна", 'тип здания']
-            for i in range(0, 7):    
+            for i in range(0, 7):
                 worksheet.write(0, i, fields[i])
         except Exception as ex:
             self.logger.error('Error in excel file creating - ' + str(ex))
 
         try:
             counter = 0
-            for i, row in enumerate(aparts): 
+            for i, row in enumerate(aparts):
                 if 'addr:street' in row.keys():
-                    counter+=1
+                    counter += 1
                     field = ''
-                    worksheet.write(counter+1, 0, counter)
+                    worksheet.write(counter + 1, 0, counter)
                     field = row['addr:street']
                     if 'addr:housenumber' in row.keys():
                         field += ' ' + row['addr:housenumber']
-                    worksheet.write(counter+1, 1, field)
+                    worksheet.write(counter + 1, 1, field)
                     if 'addr:city' in row.keys():
-                        worksheet.write(counter+1, 3, row['addr:city'])
+                        worksheet.write(counter + 1, 3, row['addr:city'])
                     if 'addr:postcode' in row.keys():
-                        worksheet.write(counter+1, 2, row['addr:postcode'])
+                        worksheet.write(counter + 1, 2, row['addr:postcode'])
                     if 'link' in row.keys():
-                        worksheet.write(counter+1, 4, row['link'])  
-                    worksheet.write(counter+1, 5, 'Austria') 
+                        worksheet.write(counter + 1, 4, row['link'])
+                    worksheet.write(counter + 1, 5, 'Canada')
                     if 'building' in row.keys():
-                        worksheet.write(counter+1, 6, row['building'])  
+                        worksheet.write(counter + 1, 6, row['building'])
             wb.close()
         except Exception as ex:
             self.logger.error('Error in inserting data - ' + str(ex))
 
-om = Overpy_map()
-aparts = om.get_apartments()
+
+if __name__ == '__main__':
+    allowed_states = ['AT-1', 'AT-3', 'AT-4', 'AT-5', 'AT-6', 'AT-7', 'AT-8', 'AT-9']
+    allowed_building = ['apartments', 'house', 'bungalow', 'cabin', 'dormitory', 'farm', 'ger', 'hotel', 'houseboat', \
+                        'residential', 'semidetached_house', 'static_caravan', 'terrace']
+    print('Начало операции')
+    if '-s' in sys.argv:
+        states = []
+        index = sys.argv.index('-s') + 1
+        while index < len(sys.argv):
+            region = sys.argv[index]
+            if region in allowed_states:
+                states.append(region)
+            index += 1
+
+    if '-b' in sys.argv:
+        index = sys.argv.index('-b') + 1
+        while index < len(sys.argv):
+            building = sys.argv[index]
+            if building in allowed_building:
+                allowed_building.remove(building)
+            index += 1
+
+    om = Overpy_map(states, allowed_building)
+    om.get_apartments()
+    print('Конец операции')
