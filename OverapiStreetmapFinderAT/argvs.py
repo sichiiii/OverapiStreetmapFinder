@@ -102,7 +102,7 @@ class Excel():
 
 
 if __name__ == '__main__':
-    allowed_states = ['AT-1', 'AT-3', 'AT-4', 'AT-5', 'AT-6', 'AT-7', 'AT-8', 'AT-9']
+    allowed_states = ['AT-1', 'AT-2', 'AT-3', 'AT-4', 'AT-5', 'AT-6', 'AT-7', 'AT-8', 'AT-9']
     allowed_building = ['apartments', 'house', 'bungalow', 'cabin', 'dormitory', 'farm', 'ger', 'hotel', 'houseboat', \
                         'residential', 'semidetached_house', 'static_caravan', 'terrace']
     print('Начало операции')
