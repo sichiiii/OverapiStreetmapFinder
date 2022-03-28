@@ -114,6 +114,8 @@ if __name__ == '__main__':
             if region in allowed_states:
                 states.append(region)
             index += 1
+    else:
+        states = allowed_states
 
     if '-b' in sys.argv:
         index = sys.argv.index('-b') + 1
