@@ -68,12 +68,13 @@ class Excel():
 
     def insert_data(self, aparts, filename):
         try:
-            wb = Workbook(os.path.dirname(os.path.abspath(__file__)) + f'/results/{filename}.xlsx')
+            wb = Workbook(f'{os.path.dirname(os.path.abspath(__file__))}/results/{filename}.xlsx')
             worksheet = wb.add_worksheet()
             fields = ["№", "адрес", "индекс", "область, город", "ссылка", "страна", 'тип здания']
             for i in range(0, 7):
                 worksheet.write(0, i, fields[i])
         except Exception as ex:
+            print(str(ex))
             self.logger.error('Error in excel file creating - ' + str(ex))
 
         try:
@@ -93,7 +94,7 @@ class Excel():
                         worksheet.write(counter + 1, 2, row['addr:postcode'])
                     if 'link' in row.keys():
                         worksheet.write(counter + 1, 4, row['link'])
-                    worksheet.write(counter + 1, 5, 'Canada')
+                    worksheet.write(counter + 1, 5, 'Australia')
                     if 'building' in row.keys():
                         worksheet.write(counter + 1, 6, row['building'])
             wb.close()

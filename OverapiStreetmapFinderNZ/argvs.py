@@ -93,7 +93,7 @@ class Excel():
                         worksheet.write(counter + 1, 2, row['addr:postcode'])
                     if 'link' in row.keys():
                         worksheet.write(counter + 1, 4, row['link'])
-                    worksheet.write(counter + 1, 5, 'Canada')
+                    worksheet.write(counter + 1, 5, 'Nederlands')
                     if 'building' in row.keys():
                         worksheet.write(counter + 1, 6, row['building'])
             wb.close()

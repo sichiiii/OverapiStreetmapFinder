@@ -93,7 +93,7 @@ class Excel():
                         worksheet.write(counter + 1, 2, row['addr:postcode'])
                     if 'link' in row.keys():
                         worksheet.write(counter + 1, 4, row['link'])
-                    worksheet.write(counter + 1, 5, 'Canada')
+                    worksheet.write(counter + 1, 5, 'Singapore')
                     if 'building' in row.keys():
                         worksheet.write(counter + 1, 6, row['building'])
             wb.close()
@@ -124,7 +124,7 @@ if __name__ == '__main__':
             if building in allowed_building:
                 allowed_building.remove(building)
             index += 1
-
+    print(allowed_building)
     om = Overpy_map(states, allowed_building)
     om.get_apartments()
     print('Конец операции')

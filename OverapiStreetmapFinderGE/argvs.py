@@ -1,4 +1,9 @@
-import app_logger, overpy, os, sys, time
+import app_logger
+import overpy
+import time
+import sys
+import os
+import re
 
 from xlsxwriter.workbook import Workbook
 
@@ -80,22 +85,36 @@ class Excel():
             counter = 0
             for i, row in enumerate(aparts):
                 if 'addr:street' in row.keys():
-                    counter += 1
-                    field = ''
-                    worksheet.write(counter + 1, 0, counter)
-                    field = row['addr:street']
-                    if 'addr:housenumber' in row.keys():
-                        field += ' ' + row['addr:housenumber']
-                    worksheet.write(counter + 1, 1, field)
-                    if 'addr:city' in row.keys():
-                        worksheet.write(counter + 1, 3, row['addr:city'])
-                    if 'addr:postcode' in row.keys():
-                        worksheet.write(counter + 1, 2, row['addr:postcode'])
-                    if 'link' in row.keys():
-                        worksheet.write(counter + 1, 4, row['link'])
-                    worksheet.write(counter + 1, 5, 'Canada')
-                    if 'building' in row.keys():
-                        worksheet.write(counter + 1, 6, row['building'])
+                    re_str = re.compile(
+                        "^.*?(?P<address>([A-Za-z]{1,30}\s*\.?){1,5}).*?\s*(?P<num>\d+)\s*(?P<symbol>.*?)$")
+                    re_found = re_str.search(row['addr:street'])
+                    if re_found is not None:
+                        try:
+                            address = re_found.group('address')
+                            try:
+                                num = re_found.group('num')
+                                address += ' ' + num
+                                try:
+                                    symbol = re_found.group('symbol')
+                                    address += symbol
+                                except:
+                                    pass
+                            except:
+                                pass
+                            counter += 1
+                            worksheet.write(counter + 1, 0, counter)
+                            worksheet.write(counter + 1, 1, address)
+                            if 'addr:city' in row.keys():
+                                worksheet.write(counter + 1, 3, row['addr:city'])
+                            if 'addr:postcode' in row.keys():
+                                worksheet.write(counter + 1, 2, row['addr:postcode'])
+                            if 'link' in row.keys():
+                                worksheet.write(counter + 1, 4, row['link'])
+                            worksheet.write(counter + 1, 5, 'Georgia')
+                            if 'building' in row.keys():
+                                worksheet.write(counter + 1, 6, row['building'])
+                        except:
+                            pass
             wb.close()
         except Exception as ex:
             self.logger.error('Error in inserting data - ' + str(ex))
@@ -103,7 +122,7 @@ class Excel():
 
 if __name__ == '__main__':
     allowed_states = ['GE-AB', 'GE-AJ', 'GE-GU', 'GE-IM', 'GE-KA', 'GE-KK', 'GE-MM', 'GE-RL', 'GE-SZ', 'GE-SJ', 'GE-TB', 'GE-SK']
-    allowed_building = ['apartments', 'house', 'bungalow', 'cabin', 'dormitory', 'farm', 'ger', 'hotel', 'houseboat', \
+    allowed_building = ['apartments', 'house', 'bungalow', 'cabin', 'dormitory', 'farm', 'ger', 'hotel', 'houseboat',
                         'residential', 'semidetached_house', 'static_caravan', 'terrace']
     print('Начало операции')
     if '-s' in sys.argv:
