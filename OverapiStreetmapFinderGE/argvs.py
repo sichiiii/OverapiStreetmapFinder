@@ -84,10 +84,11 @@ class Excel():
         try:
             counter = 0
             for i, row in enumerate(aparts):
-                if 'addr:street' in row.keys():
+
+                if ('addr:street' in row.keys()) and ('addr:housenumber' in row.keys()):
                     re_str = re.compile(
                         "^.*?(?P<address>([A-Za-z]{1,30}\s*\.?){1,5}).*?\s*(?P<num>\d+)\s*(?P<symbol>.*?)$")
-                    re_found = re_str.search(row['addr:street'])
+                    re_found = re_str.search(row['addr:street']+ ' ' + row['addr:housenumber'])
                     if re_found is not None:
                         try:
                             address = re_found.group('address')
@@ -101,18 +102,19 @@ class Excel():
                                     pass
                             except:
                                 pass
-                            counter += 1
-                            worksheet.write(counter + 1, 0, counter)
-                            worksheet.write(counter + 1, 1, address)
-                            if 'addr:city' in row.keys():
-                                worksheet.write(counter + 1, 3, row['addr:city'])
-                            if 'addr:postcode' in row.keys():
-                                worksheet.write(counter + 1, 2, row['addr:postcode'])
-                            if 'link' in row.keys():
-                                worksheet.write(counter + 1, 4, row['link'])
-                            worksheet.write(counter + 1, 5, 'Georgia')
-                            if 'building' in row.keys():
-                                worksheet.write(counter + 1, 6, row['building'])
+                            if len(address) > 6:
+                                counter += 1
+                                worksheet.write(counter + 1, 0, counter)
+                                worksheet.write(counter + 1, 1, address)
+                                if 'addr:city' in row.keys():
+                                    worksheet.write(counter + 1, 3, row['addr:city'])
+                                if 'addr:postcode' in row.keys():
+                                    worksheet.write(counter + 1, 2, row['addr:postcode'])
+                                if 'link' in row.keys():
+                                    worksheet.write(counter + 1, 4, row['link'])
+                                worksheet.write(counter + 1, 5, 'Georgia')
+                                if 'building' in row.keys():
+                                    worksheet.write(counter + 1, 6, row['building'])
                         except:
                             pass
             wb.close()
