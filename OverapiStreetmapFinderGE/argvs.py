@@ -103,18 +103,22 @@ class Excel():
                                     pass
                             except:
                                 pass
-                            if (len(address) > 6) and (address not in added) and (row['add:postcode'] not in added):
+                            if (len(address) > 6) and (address not in added) and (row['addr:postcode'] not in added):
                                 counter += 1
                                 worksheet.write(counter + 1, 0, counter)
                                 worksheet.write(counter + 1, 1, address)
-                                added.append(address)
+                                if len(str(row['addr:postcode'])) > 3:
+                                    worksheet.write(counter + 1, 2, row['addr:postcode'])
+                                else:
+                                    worksheet.write(counter + 1, 2, ("0" + row['addr:postcode']))
                                 worksheet.write(counter + 1, 3, row['addr:city'])
-                                worksheet.write(counter + 1, 2, row['addr:postcode'])
-                                added.apppend(row['addr:postcode'])
                                 worksheet.write(counter + 1, 4, row['link'])
                                 worksheet.write(counter + 1, 5, 'Georgia')
                                 if 'building' in row.keys():
                                     worksheet.write(counter + 1, 6, row['building'])
+
+                                added.append(address)
+                                added.apppend(row['addr:postcode'])
                         except:
                             pass
             wb.close()
