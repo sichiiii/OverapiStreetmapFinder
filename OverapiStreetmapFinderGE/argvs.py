@@ -83,6 +83,7 @@ class Excel():
 
         try:
             counter = 0
+            added = []
             for i, row in enumerate(aparts):
 
                 if ('addr:street' in row.keys()) and ('addr:housenumber' in row.keys()):
@@ -102,16 +103,15 @@ class Excel():
                                     pass
                             except:
                                 pass
-                            if len(address) > 6:
+                            if (len(address) > 6) and (address not in added) and (row['add:postcode'] not in added):
                                 counter += 1
                                 worksheet.write(counter + 1, 0, counter)
                                 worksheet.write(counter + 1, 1, address)
-                                if 'addr:city' in row.keys():
-                                    worksheet.write(counter + 1, 3, row['addr:city'])
-                                if 'addr:postcode' in row.keys():
-                                    worksheet.write(counter + 1, 2, row['addr:postcode'])
-                                if 'link' in row.keys():
-                                    worksheet.write(counter + 1, 4, row['link'])
+                                added.append(address)
+                                worksheet.write(counter + 1, 3, row['addr:city'])
+                                worksheet.write(counter + 1, 2, row['addr:postcode'])
+                                added.apppend(row['addr:postcode'])
+                                worksheet.write(counter + 1, 4, row['link'])
                                 worksheet.write(counter + 1, 5, 'Georgia')
                                 if 'building' in row.keys():
                                     worksheet.write(counter + 1, 6, row['building'])
