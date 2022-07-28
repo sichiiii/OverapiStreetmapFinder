@@ -24,7 +24,7 @@ class Overpy_map():
                                 ( 
                                     way(area.country)
 
-                                    [building={building}][~"addr:postcode"~"."][~"addr:street"~"."][~"addr:housenumber"~"."];
+                                    [building={building}][~"addr:street"~"."][~"addr:housenumber"~"."];
                                 );
                                 out body;
                                 >;
@@ -47,11 +47,12 @@ class Overpy_map():
                         try:
                             res[temp].tags[
                                 'link'] = f"""https://www.google.com/maps/place/{res[temp].tags['addr:housenumber']}+{
-                            res[temp].tags['addr:street']}+{res[temp].tags['addr:postcode']}+{res[temp].tags['addr:city']}/@{
+                            res[temp].tags['addr:street']}/@{
                             res[temp].nodes[2].lat},{res[temp].nodes[2].lon},17z/"""
                             res[temp].tags['link'] = res[temp].tags['link'].replace(' ', '+')
                             arr.append(res[temp].tags)
-                        except:
+                        except Exception as ex:
+                            print(str(ex))
                             res[temp].tags['link'] = 'None'
                         temp += 1
 
@@ -70,8 +71,8 @@ class Excel():
         try:
             wb = Workbook(f'{os.path.dirname(os.path.abspath(__file__))}/results/{filename}.xlsx')
             worksheet = wb.add_worksheet()
-            fields = ["№", "адрес", "индекс", "область, город", "ссылка", "страна", 'тип здания']
-            for i in range(0, 7):
+            fields = ["№", "адрес", "индекс", "ссылка", "страна", 'тип здания']
+            for i in range(0, 6):
                 worksheet.write(0, i, fields[i])
         except Exception as ex:
             print(str(ex))
@@ -93,10 +94,10 @@ class Excel():
                     if 'addr:postcode' in row.keys():
                         worksheet.write(counter + 1, 2, row['addr:postcode'])
                     if 'link' in row.keys():
-                        worksheet.write(counter + 1, 4, row['link'])
-                    worksheet.write(counter + 1, 5, 'Australia')
+                        worksheet.write(counter + 1, 3, row['link'])
+                    worksheet.write(counter + 1, 4, 'Australia')
                     if 'building' in row.keys():
-                        worksheet.write(counter + 1, 6, row['building'])
+                        worksheet.write(counter + 1, 5, row['building'])
             wb.close()
         except Exception as ex:
             self.logger.error('Error in inserting data - ' + str(ex))
